@@ -1,0 +1,40 @@
+---
+import Base from "../layouts/Base.astro";
+import { getAllPieces, decadeOf } from "../lib/archive";
+
+const pieces = await getAllPieces();
+const byType: Record<string, number> = {};
+const byDecade: Record<number, number> = {};
+const sourceCounts: Record<string, number> = {};
+
+for (const p of pieces) {
+  byType[p.collection] = (byType[p.collection] ?? 0) + 1;
+  const decade = decadeOf(p.data.date);
+  byDecade[decade] = (byDecade[decade] ?? 0) + 1;
+  sourceCounts[p.data.source.name] = (sourceCounts[p.data.source.name] ?? 0) + 1;
+}
+
+const topSources = Object.entries(sourceCounts).sort((a, b) => b[1] - a[1]).slice(0, 10);
+const decades = Object.entries(byDecade).sort(([a], [b]) => Number(a) - Number(b));
+---
+<Base title="Stats">
+  <h2>Estado del archivo</h2>
+  <p>Tablero de progreso de curaduría — cuánto hay y qué falta.</p>
+
+  <h3>Por tipo</h3>
+  <ul>
+    {Object.entries(byType).map(([type, count]) => <li>{type}: {count}</li>)}
+  </ul>
+
+  <h3>Por década</h3>
+  <ul>
+    {decades.map(([decade, count]) => <li>{decade}s: {count}</li>)}
+  </ul>
+
+  <h3>Fuentes más citadas</h3>
+  <ul>
+    {topSources.map(([name, count]) => <li>{name}: {count}</li>)}
+  </ul>
+
+  <p>Total: {pieces.length} piezas</p>
+</Base>

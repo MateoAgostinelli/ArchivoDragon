@@ -1,0 +1,20 @@
+---
+// Cita de fuente: siempre visible, en cada pieza, sin excepción — es el
+// requisito central del proyecto (ver docs/designs/archivodragon.md).
+interface Props {
+  source: { name: string; url?: string; archived_url?: string };
+}
+const { source } = Astro.props;
+const archivedLink =
+  source.archived_url && source.archived_url !== "pending" ? source.archived_url : null;
+---
+<p class="fuente">
+  Fuente: {source.name}
+  {source.url && <> — <a href={source.url} rel="noopener">original</a></>}
+  {archivedLink && <> — <a href={archivedLink} rel="noopener">copia archivada</a></>}
+  {source.archived_url === "pending" && <span class="pending"> (archivado pendiente)</span>}
+</p>
+<style>
+  .fuente { font-size: 0.85rem; color: #557; border-top: 1px dotted #bbb; padding-top: 0.4rem; margin-top: 0.6rem; }
+  .pending { color: #999; font-style: italic; }
+</style>

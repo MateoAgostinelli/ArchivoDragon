@@ -1,0 +1,70 @@
+name: Rebuild diario (tal día como hoy)
+
+# El sitio es 100% estático, pero "tal día como hoy" depende de la fecha de
+# HOY — este cron reconstruye y redeploya el sitio una vez por día (decisión 1A).
+#
+# TIMEZONE: GitHub Actions corre en UTC. "0 3 * * *" = 03:00 UTC = medianoche
+# en Argentina (UTC-3) todo el año (sin horario de verano). Riesgo de timezone
+# marcado y ACEPTADO sin corrección en /plan-eng-review 2026-07-24 (hallazgo
+# 13A) — si algún día importa más precisión, mover el cálculo de "hoy" a
+# código que use America/Argentina/Buenos_Aires explícitamente.
+#
+# KEEP-ALIVE (decisión 2A): GitHub apaga los workflows programados tras 60
+# días sin actividad en el repo. El día 1 de cada mes este cron hace un
+# commit trivial (timestamp) para que el repo nunca llegue a los 60 días de
+# silencio, incluso sin contenido nuevo.
+
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Keep-alive mensual (día 1 del mes)
+        run: |
+          if [ "$(date -u +%d)" = "01" ]; then
+            mkdir -p .github/state
+            date -u +%Y-%m-%dT%H:%M:%SZ > .github/state/last-keepalive.txt
+            git config user.name "archivodragon-bot"
+            git config user.email "actions@users.noreply.github.com"
+            git add .github/state/last-keepalive.txt
+            git diff --staged --quiet || git commit -m "chore: keep-alive mensual del cron diario"
+            git push
+          else
+            echo "No es día 1 del mes, no hace falta keep-alive."
+          fi
+
+  build-and-deploy:
+    needs: keep-alive
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main # toma el commit de keep-alive si hubo uno
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - id: deployment
+        uses: actions/deploy-pages@v4

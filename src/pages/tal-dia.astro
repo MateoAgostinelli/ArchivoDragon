@@ -1,0 +1,46 @@
+---
+// Gateada hasta RICH_VIEWS_THRESHOLD piezas (decisión T1). Solo usa piezas
+// con date_precision "exact" (hallazgo 6A). Fallback a la pieza exacta más
+// cercana si no hay ninguna para la fecha de hoy (nunca página en blanco).
+// TODO: fijar timezone America/Argentina/Buenos_Aires en el cron diario que
+// reconstruye esta página (riesgo aceptado sin corregir, hallazgo 13A).
+import Base from "../layouts/Base.astro";
+import SourceCite from "../components/SourceCite.astro";
+import { getAllPieces, richViewsUnlocked, exactDatedOnly, closestPieceToToday, RICH_VIEWS_THRESHOLD } from "../lib/archive";
+
+const pieces = await getAllPieces();
+const unlocked = await richViewsUnlocked();
+const today = new Date();
+const todayMD = `${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+const exact = exactDatedOnly(pieces);
+const todays = exact.filter((p) => p.data.date.slice(5) === todayMD);
+const fallback = todays.length === 0 ? closestPieceToToday(pieces, today) : null;
+---
+<Base title="Tal día como hoy">
+  <h2>Tal día como hoy en la historia del Dragón</h2>
+  {!unlocked ? (
+    <p class="notice">
+      Esta vista se activa con {RICH_VIEWS_THRESHOLD} piezas curadas (hoy: {pieces.length}).
+    </p>
+  ) : todays.length > 0 ? (
+    <ul>
+      {todays.map((p) => (
+        <li>
+          <a href={`/pieza/${p.collection}/${p.id}`}>{p.data.title}</a>
+          <SourceCite source={p.data.source} />
+        </li>
+      ))}
+    </ul>
+  ) : fallback ? (
+    <div>
+      <p>No hay piezas exactas para hoy. La más cercana:</p>
+      <a href={`/pieza/${fallback.collection}/${fallback.id}`}>{fallback.data.title}</a>
+      <SourceCite source={fallback.data.source} />
+    </div>
+  ) : (
+    <p>Todavía no hay piezas con fecha exacta.</p>
+  )}
+  <style>
+    .notice { background: #fff8e6; border: 1px solid #e6c200; padding: 0.8rem; }
+  </style>
+</Base>

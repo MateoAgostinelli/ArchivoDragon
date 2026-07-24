@@ -1,0 +1,31 @@
+---
+import Base from "../../../layouts/Base.astro";
+import SourceCite from "../../../components/SourceCite.astro";
+import { getCollection, render, type CollectionKey } from "astro:content";
+import { PIECE_TYPES } from "../../../lib/archive";
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const type of PIECE_TYPES) {
+    const entries = await getCollection(type as CollectionKey);
+    for (const entry of entries) {
+      paths.push({ params: { type, id: entry.id }, props: { entry } });
+    }
+  }
+  return paths;
+}
+
+const { entry } = Astro.props as { entry: Awaited<ReturnType<typeof getCollection>>[number] };
+const { Content } = await render(entry);
+---
+<Base title={entry.data.title}>
+  <span class="tipo">{entry.collection}</span>
+  <h2>{entry.data.title}</h2>
+  <div class="fecha">{entry.data.date_display ?? entry.data.date}</div>
+  <div class="body"><Content /></div>
+  <SourceCite source={entry.data.source} />
+  <style>
+    .tipo { font-size: 0.75rem; text-transform: uppercase; background: #900; color: #fff; padding: 1px 6px; border-radius: 2px; }
+    .fecha { color: #777; margin: 0.4rem 0 1rem; }
+  </style>
+</Base>

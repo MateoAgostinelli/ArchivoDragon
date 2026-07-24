@@ -1,0 +1,24 @@
+---
+// Gateada hasta RICH_VIEWS_THRESHOLD piezas (decisión T1). Feature bandera de
+// etapa 2 según el design doc: navegar por fecha y "revivir un día". Necesita
+// el schema v2 de partido (rival/resultado/torneo/formación) ya diseñado en
+// content.config.ts. TODO: selector de fecha real; hoy es un placeholder.
+import Base from "../layouts/Base.astro";
+import { getAllPieces, richViewsUnlocked, RICH_VIEWS_THRESHOLD } from "../lib/archive";
+
+const pieces = await getAllPieces();
+const unlocked = await richViewsUnlocked();
+---
+<Base title="Máquina del tiempo">
+  <h2>Máquina del tiempo</h2>
+  {!unlocked ? (
+    <p class="notice">
+      Esta vista se activa con {RICH_VIEWS_THRESHOLD} piezas curadas (hoy: {pieces.length}).
+    </p>
+  ) : (
+    <p>TODO: selector de fecha navegable.</p>
+  )}
+  <style>
+    .notice { background: #fff8e6; border: 1px solid #e6c200; padding: 0.8rem; }
+  </style>
+</Base>

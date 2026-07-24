@@ -1,0 +1,35 @@
+name: Vigía de link-rot (mensual)
+
+# Chequea las citas de fuente y abre un issue con las que parecen muertas.
+# NUNCA commitea contenido — eso violaría la regla de "curaduría manual antes
+# de cada commit" (decisión 10A). Doble chequeo separado por 48h antes de
+# reportar algo como muerto: los diarios argentinos devuelven 403 a bots
+# seguido, y un solo chequeo generaría falsos positivos.
+
+on:
+  schedule:
+    - cron: "0 12 1 * *" # 1° de cada mes
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check-links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests pyyaml
+      - name: Chequear links de fuentes
+        run: python pipeline/check_link_rot.py --report-only
+      - name: Abrir issue si hay links sospechosos
+        uses: peter-evans/create-issue-from-file@v5
+        if: hashFiles('link-rot-report.md') != ''
+        with:
+          title: "Vigía de link-rot: revisar citas de fuente"
+          content-filepath: link-rot-report.md
+          labels: link-rot

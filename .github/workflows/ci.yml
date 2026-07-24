@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Instalar dependencias del sitio
+        run: npm ci
+
+      - name: Instalar dependencias del pipeline
+        run: pip install -r pipeline/requirements.txt
+
+      - name: Tests del pipeline (pytest)
+        run: python -m pytest pipeline/tests -q
+
+      - name: Tests del sitio (vitest)
+        run: npm run test
+
+      # Smoke de build: valida el schema de TODAS las piezas (falla si a
+      # alguna le falta source.name, ver src/content.config.ts).
+      - name: Build del sitio (valida el schema)
+        run: npm run build
