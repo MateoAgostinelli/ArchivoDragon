@@ -11,6 +11,13 @@ source:
 tags: ["cancionero"]
 ---
 
-Cántico de la Barra del Dragón. Fecha de origen desconocida — folclore de
-tribuna sin autor identificado; se registra la fecha de archivado, no de
-composición. Letra completa disponible en la fuente original.
+dale dale dale dale defe y dale dale dale defe
+y dale dale defe y dale dale defe
+como olvidar esos momentos de alegria
+gracias a vos yo conoci toda argentina
+ya todos saben qe aguantamo en la provincia
+Dragón querido yo por vos daria la vida 
+y no me importa lo qe diga chacarita
+el periodismo, los putos de excursionista
+y vamos defe que tenes que salir primero
+por esos pibes qe te alientan desde el cielo

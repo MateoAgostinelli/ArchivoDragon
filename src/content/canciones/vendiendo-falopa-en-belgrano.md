@@ -11,6 +11,11 @@ source:
 tags: ["cancionero"]
 ---
 
-Cántico de la Barra del Dragón. Fecha de origen desconocida — folclore de
-tribuna sin autor identificado; se registra la fecha de archivado, no de
-composición. Letra completa disponible en la fuente original.
+Vendiendo falopa, en Belgrano los vas a ver
+Transa hijo de puta, vos de Excursio tenes que ser
+Vos haces banderas, a tu vieja la haces coser
+Y todos sabemos, que paras con la 33
+Vos vos sos un cagon
+Chupan pija alla en Victoria
+No te olvides, quien te mando a la C
+Quien te mando al descenso
