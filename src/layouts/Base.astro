@@ -11,6 +11,7 @@ const { title } = Astro.props;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/escudo.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -27,7 +28,10 @@ const { title } = Astro.props;
   <body>
     <header class="site-header">
       <div class="wrap header-inner">
-        <a href="/" class="wordmark">ARCHIVO<span class="rojo">DRAGÓN</span></a>
+        <a href="/" class="wordmark">
+          <img src="/escudo.svg" alt="Escudo de Defensores de Belgrano" class="header-escudo" />
+          ARCHIVO<span class="rojo">DRAGÓN</span>
+        </a>
         <nav>
           <a href="/">Inicio</a>
           <a href="/noticias">Noticias</a>
@@ -75,8 +79,12 @@ const { title } = Astro.props;
         color: var(--ink);
         text-decoration: none;
         white-space: nowrap;
+        display: flex;
+        align-items: center;
+        gap: 10px;
       }
       .wordmark .rojo { color: var(--rojo); }
+      .header-escudo { height: 28px; width: auto; display: block; }
       nav { display: flex; gap: var(--space-3); font-size: 14px; flex: 1; }
       nav a { color: var(--ink-soft); text-decoration: none; }
       nav a:hover { color: var(--rojo); }
