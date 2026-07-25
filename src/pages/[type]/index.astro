@@ -3,6 +3,7 @@ import Base from "../../layouts/Base.astro";
 import SourceCite from "../../components/SourceCite.astro";
 import { getCollection, type CollectionKey } from "astro:content";
 import { PIECE_TYPES, sortByDate } from "../../lib/archive";
+import { url } from "../../lib/base";
 
 export function getStaticPaths() {
   return PIECE_TYPES.map((type) => ({ params: { type } }));
@@ -20,7 +21,7 @@ const pieces = sortByDate(await getCollection(type as CollectionKey)).reverse();
       {pieces.map((p) => (
         <li>
           <div class="row">
-            <a href={`/pieza/${type}/${p.id}`}>{p.data.title}</a>
+            <a href={url(`pieza/${type}/${p.id}`)}>{p.data.title}</a>
             <span class="fecha">{p.data.date_display ?? p.data.date}</span>
           </div>
           <SourceCite source={p.data.source} />

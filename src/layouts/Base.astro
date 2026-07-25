@@ -1,5 +1,6 @@
 ---
 import "../styles/tokens.css";
+import { url } from "../lib/base";
 
 interface Props {
   title: string;
@@ -11,7 +12,7 @@ const { title } = Astro.props;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/escudo.svg" />
+    <link rel="icon" type="image/svg+xml" href={url("escudo.svg")} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -28,17 +29,17 @@ const { title } = Astro.props;
   <body>
     <header class="site-header">
       <div class="wrap header-inner">
-        <a href="/" class="wordmark">
-          <img src="/escudo.svg" alt="Escudo de Defensores de Belgrano" class="header-escudo" />
+        <a href={url("")} class="wordmark">
+          <img src={url("escudo.svg")} alt="Escudo de Defensores de Belgrano" class="header-escudo" />
           ARCHIVO<span class="rojo">DRAGÓN</span>
         </a>
         <nav>
-          <a href="/">Inicio</a>
-          <a href="/noticias">Noticias</a>
-          <a href="/canciones">Cancionero</a>
-          <a href="/partidos">Partidos</a>
-          <a href="/historias">Historias</a>
-          <a href="/stats">Stats</a>
+          <a href={url("")}>Inicio</a>
+          <a href={url("noticias")}>Noticias</a>
+          <a href={url("canciones")}>Cancionero</a>
+          <a href={url("partidos")}>Partidos</a>
+          <a href={url("historias")}>Historias</a>
+          <a href={url("stats")}>Stats</a>
         </nav>
         <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema claro/oscuro">◐</button>
       </div>

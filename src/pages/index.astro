@@ -2,6 +2,7 @@
 import Base from "../layouts/Base.astro";
 import SourceCite from "../components/SourceCite.astro";
 import { getAllPieces, sortByDate, richViewsUnlocked, RICH_VIEWS_THRESHOLD } from "../lib/archive";
+import { url } from "../lib/base";
 
 const pieces = await getAllPieces();
 const recent = sortByDate(pieces).reverse().slice(0, 6);
@@ -16,7 +17,7 @@ const sources = new Set(pieces.map((p) => p.data.source.name));
           <span class="tag">Archivo histórico — 1906 / hoy</span>
           <h1>ARCHIVO<br /><em>Dragón</em></h1>
         </div>
-        <img src="/escudo.svg" alt="Escudo de Defensores de Belgrano" class="hero-escudo" />
+        <img src={url("escudo.svg")} alt="Escudo de Defensores de Belgrano" class="hero-escudo" />
       </div>
       <p class="sub">
         Noticias de diario, historias, canciones y partidos — juntados de blogs,
@@ -42,7 +43,7 @@ const sources = new Set(pieces.map((p) => p.data.source.name));
         {recent.map((p) => (
           <article class="card">
             <span class="kicker">{p.collection}</span>
-            <h3><a href={`/pieza/${p.collection}/${p.id}`}>{p.data.title}</a></h3>
+            <h3><a href={url(`pieza/${p.collection}/${p.id}`)}>{p.data.title}</a></h3>
             <div class="fecha">{p.data.date_display ?? p.data.date}</div>
             <SourceCite source={p.data.source} />
           </article>
