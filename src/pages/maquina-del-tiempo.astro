@@ -10,15 +10,18 @@ const pieces = await getAllPieces();
 const unlocked = await richViewsUnlocked();
 ---
 <Base title="Máquina del tiempo">
-  <h2>Máquina del tiempo</h2>
-  {!unlocked ? (
-    <p class="notice">
-      Esta vista se activa con {RICH_VIEWS_THRESHOLD} piezas curadas (hoy: {pieces.length}).
-    </p>
-  ) : (
-    <p>TODO: selector de fecha navegable.</p>
-  )}
+  <div class="wrap">
+    <span class="kicker">En construcción</span>
+    <h1>Máquina del tiempo</h1>
+    {!unlocked ? (
+      <p class="notice">
+        Esta vista se activa con {RICH_VIEWS_THRESHOLD} piezas curadas (hoy: {pieces.length}).
+      </p>
+    ) : (
+      <p>TODO: selector de fecha navegable.</p>
+    )}
+  </div>
   <style>
-    .notice { background: #fff8e6; border: 1px solid #e6c200; padding: 0.8rem; }
+    h1 { font-family: var(--font-display); font-size: clamp(28px, 5vw, 40px); margin: var(--space-2) 0 var(--space-3); }
   </style>
 </Base>

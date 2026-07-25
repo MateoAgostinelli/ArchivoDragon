@@ -12,20 +12,30 @@ const { type } = Astro.params as { type: (typeof PIECE_TYPES)[number] };
 const pieces = sortByDate(await getCollection(type as CollectionKey)).reverse();
 ---
 <Base title={type}>
-  <h2>{type}</h2>
-  <p>{pieces.length} piezas</p>
-  <ul class="list">
-    {pieces.map((p) => (
-      <li>
-        <a href={`/pieza/${type}/${p.id}`}>{p.data.title}</a>
-        <span class="fecha">{p.data.date_display ?? p.data.date}</span>
-        <SourceCite source={p.data.source} />
-      </li>
-    ))}
-  </ul>
+  <div class="wrap">
+    <span class="kicker">{type}</span>
+    <h1>{type}</h1>
+    <p class="count">{pieces.length} piezas</p>
+    <ul class="list">
+      {pieces.map((p) => (
+        <li>
+          <div class="row">
+            <a href={`/pieza/${type}/${p.id}`}>{p.data.title}</a>
+            <span class="fecha">{p.data.date_display ?? p.data.date}</span>
+          </div>
+          <SourceCite source={p.data.source} />
+        </li>
+      ))}
+    </ul>
+  </div>
   <style>
-    .list { list-style: none; padding: 0; }
-    .list li { border-bottom: 1px solid #eee; padding: 0.6rem 0; }
-    .fecha { color: #777; font-size: 0.85rem; margin-left: 0.5rem; }
+    h1 { font-family: var(--font-display); font-size: 40px; margin: var(--space-2) 0 4px; text-transform: capitalize; }
+    .count { font-family: var(--font-mono); font-size: 13px; color: var(--ink-faint); margin-bottom: var(--space-4); }
+    .list { list-style: none; padding: 0; margin: 0; }
+    .list li { border-bottom: 1px solid var(--rule); padding: var(--space-2) 0; }
+    .row { display: flex; align-items: baseline; gap: var(--space-2); flex-wrap: wrap; }
+    .row a { font-family: var(--font-display); font-size: 19px; font-weight: 600; color: var(--ink); text-decoration: none; }
+    .row a:hover { color: var(--rojo); }
+    .fecha { font-family: var(--font-mono); font-size: 13px; color: var(--ink-faint); }
   </style>
 </Base>

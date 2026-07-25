@@ -9,49 +9,79 @@ const unlocked = await richViewsUnlocked();
 const sources = new Set(pieces.map((p) => p.data.source.name));
 ---
 <Base title="Inicio">
-  <section class="hero">
-    <h2>120 años del Dragón, en un solo lugar.</h2>
-    <p>
-      Noticias de diario, historias, canciones y partidos — juntados de blogs,
-      hemerotecas y memoria de hinchas. Cada pieza cita su fuente original.
-    </p>
-    <div class="stats">
-      <span><b>{pieces.length}</b> piezas archivadas</span>
-      <span><b>{sources.size}</b> fuentes citadas</span>
-    </div>
-  </section>
+  <div class="wrap">
+    <section class="hero">
+      <span class="tag">Archivo histórico — 1906 / hoy</span>
+      <h1>ARCHIVO<br /><em>Dragón</em></h1>
+      <p class="sub">
+        Noticias de diario, historias, canciones y partidos — juntados de blogs,
+        hemerotecas y memoria de hinchas. Cada pieza cita su fuente original.
+      </p>
+      <div class="stats">
+        <span><b>{pieces.length}</b>piezas archivadas</span>
+        <span><b>{sources.size}</b>fuentes citadas</span>
+      </div>
+    </section>
 
-  {!unlocked && (
-    <p class="notice">
-      La línea de tiempo, la máquina del tiempo y "tal día como hoy" se activan
-      al llegar a {RICH_VIEWS_THRESHOLD} piezas curadas ({pieces.length}/{RICH_VIEWS_THRESHOLD} hoy).
-      <a href="#aportar">¿Tenés material del Dragón?</a>
-    </p>
-  )}
+    {!unlocked && (
+      <p class="notice">
+        La línea de tiempo, la máquina del tiempo y "tal día como hoy" se activan
+        al llegar a {RICH_VIEWS_THRESHOLD} piezas curadas ({pieces.length}/{RICH_VIEWS_THRESHOLD} hoy).
+        {" "}<a href="#aportar">¿Tenés material del Dragón?</a>
+      </p>
+    )}
 
-  <h3>Últimas piezas agregadas</h3>
-  <div class="grid">
-    {recent.map((p) => (
-      <article class="card">
-        <span class={`tipo tipo-${p.collection}`}>{p.collection}</span>
-        <h4><a href={`/pieza/${p.collection}/${p.id}`}>{p.data.title}</a></h4>
-        <div class="fecha">{p.data.date_display ?? p.data.date}</div>
-        <SourceCite source={p.data.source} />
-      </article>
-    ))}
+    <section>
+      <h2 class="section-title">Últimas piezas agregadas</h2>
+      <div class="grid">
+        {recent.map((p) => (
+          <article class="card">
+            <span class="kicker">{p.collection}</span>
+            <h3><a href={`/pieza/${p.collection}/${p.id}`}>{p.data.title}</a></h3>
+            <div class="fecha">{p.data.date_display ?? p.data.date}</div>
+            <SourceCite source={p.data.source} />
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <p id="aportar" class="aportar">
+      ¿Tenés material del Dragón? <a href="#">Contanos acá</a> (link al Google Form — TODO).
+    </p>
   </div>
 
-  <p id="aportar">
-    ¿Tenés material del Dragón? <a href="#">Contanos acá</a> (link al Google Form — TODO).
-  </p>
-
   <style>
-    .hero { border: 1px solid #ddd; padding: 1.2rem; margin: 1.5rem 0; }
-    .stats { display: flex; gap: 1.5rem; margin-top: 0.6rem; font-size: 0.9rem; }
-    .notice { background: #fff8e6; border: 1px solid #e6c200; padding: 0.8rem; font-size: 0.9rem; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
-    .card { border: 1px solid #ccc; padding: 0.8rem; }
-    .tipo { font-size: 0.7rem; text-transform: uppercase; background: #900; color: #fff; padding: 1px 6px; border-radius: 2px; }
-    .fecha { color: #777; font-size: 0.85rem; margin: 0.3rem 0; }
+    .hero { padding: var(--space-5) 0 var(--space-4); border-bottom: 1px solid var(--rule); }
+    .hero .tag {
+      font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--rojo); margin-bottom: var(--space-2); display: block;
+    }
+    .hero h1 {
+      font-family: var(--font-display); font-weight: 900; font-size: clamp(52px, 13vw, 168px);
+      line-height: 0.88; letter-spacing: -0.02em; margin: 0; color: var(--ink);
+    }
+    .hero h1 em { font-style: italic; font-weight: 500; color: var(--rojo); }
+    .hero .sub {
+      font-family: var(--font-body); font-size: 18px; color: var(--ink-soft); max-width: 520px;
+      margin-top: var(--space-2);
+    }
+    .stats { display: flex; gap: var(--space-4); margin-top: var(--space-2); font-family: var(--font-mono); font-size: 13px; color: var(--ink-soft); }
+    .stats b { font-family: var(--font-display); font-size: 22px; color: var(--ink); font-weight: 700; display: block; }
+
+    section { padding: var(--space-5) 0; border-bottom: 1px solid var(--rule); }
+    section:last-of-type { border-bottom: none; }
+    .section-title {
+      font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ink-faint); margin: 0 0 var(--space-3); font-weight: normal;
+    }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-2); }
+    .card { background: var(--paper-raised); border: 1px solid var(--rule); border-radius: var(--radius-md); padding: var(--space-2); }
+    .card h3 { font-family: var(--font-display); font-size: 21px; font-weight: 600; margin: var(--space-1) 0 6px; }
+    .card h3 a { color: var(--ink); text-decoration: none; }
+    .card h3 a:hover { color: var(--rojo); }
+    .fecha { font-family: var(--font-mono); font-size: 13px; color: var(--ink-faint); margin-bottom: var(--space-1); }
+
+    .aportar { padding: var(--space-3) 0; font-size: 14px; color: var(--ink-soft); }
   </style>
 </Base>

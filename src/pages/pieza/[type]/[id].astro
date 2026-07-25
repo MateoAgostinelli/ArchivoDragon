@@ -17,15 +17,40 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props as { entry: Awaited<ReturnType<typeof getCollection>>[number] };
 const { Content } = await render(entry);
+const partido = entry.data as typeof entry.data & {
+  rival?: string;
+  resultado?: string;
+  torneo?: string;
+};
 ---
 <Base title={entry.data.title}>
-  <span class="tipo">{entry.collection}</span>
-  <h2>{entry.data.title}</h2>
-  <div class="fecha">{entry.data.date_display ?? entry.data.date}</div>
-  <div class="body"><Content /></div>
-  <SourceCite source={entry.data.source} />
+  <div class="wrap">
+    <span class="kicker">{entry.collection}</span>
+    <h1>{entry.data.title}</h1>
+    <div class="fecha">{entry.data.date_display ?? entry.data.date}</div>
+
+    {entry.collection === "partidos" && (partido.rival || partido.resultado) && (
+      <div class="ficha">
+        {partido.rival && <span><span class="k">Rival</span>{partido.rival}</span>}
+        {partido.resultado && <span><span class="k">Resultado</span>{partido.resultado}</span>}
+        {partido.torneo && <span><span class="k">Torneo</span>{partido.torneo}</span>}
+      </div>
+    )}
+
+    <div class="body"><Content /></div>
+    <SourceCite source={entry.data.source} />
+  </div>
   <style>
-    .tipo { font-size: 0.75rem; text-transform: uppercase; background: #900; color: #fff; padding: 1px 6px; border-radius: 2px; }
-    .fecha { color: #777; margin: 0.4rem 0 1rem; }
+    h1 { font-family: var(--font-display); font-size: clamp(28px, 5vw, 40px); margin: var(--space-1) 0 4px; line-height: 1.05; }
+    .fecha { font-family: var(--font-mono); font-size: 14px; color: var(--ink-faint); margin-bottom: var(--space-3); }
+    .ficha {
+      display: flex; gap: var(--space-4); flex-wrap: wrap;
+      font-family: var(--font-mono); font-size: 14px; color: var(--ink);
+      background: var(--paper-raised); border: 1px solid var(--rule); border-radius: var(--radius-md);
+      padding: var(--space-2); margin-bottom: var(--space-3);
+    }
+    .ficha .k { display: block; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); }
+    .body { font-size: 17px; color: var(--ink-soft); max-width: 640px; }
+    .body :global(p) { margin: 0 0 var(--space-2); }
   </style>
 </Base>

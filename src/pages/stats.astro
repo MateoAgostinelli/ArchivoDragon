@@ -16,25 +16,64 @@ for (const p of pieces) {
 
 const topSources = Object.entries(sourceCounts).sort((a, b) => b[1] - a[1]).slice(0, 10);
 const decades = Object.entries(byDecade).sort(([a], [b]) => Number(a) - Number(b));
+const maxDecadeCount = Math.max(...decades.map(([, c]) => c), 1);
 ---
 <Base title="Stats">
-  <h2>Estado del archivo</h2>
-  <p>Tablero de progreso de curaduría — cuánto hay y qué falta.</p>
+  <div class="wrap">
+    <span class="kicker">Tablero</span>
+    <h1>Estado del archivo</h1>
+    <p class="sub">Progreso de curaduría — cuánto hay y qué falta.</p>
 
-  <h3>Por tipo</h3>
-  <ul>
-    {Object.entries(byType).map(([type, count]) => <li>{type}: {count}</li>)}
-  </ul>
+    <section>
+      <h2 class="section-title">Por década</h2>
+      <div class="timeline">
+        {decades.map(([decade, count]) => (
+          <div class="bar" style={`height:${Math.max((count / maxDecadeCount) * 100, 6)}%`}>
+            <span class="lbl">{decade}s</span>
+          </div>
+        ))}
+      </div>
+    </section>
 
-  <h3>Por década</h3>
-  <ul>
-    {decades.map(([decade, count]) => <li>{decade}s: {count}</li>)}
-  </ul>
+    <section>
+      <h2 class="section-title">Por tipo</h2>
+      <ul class="stat-list">
+        {Object.entries(byType).map(([type, count]) => (
+          <li><span class="n">{count}</span><span class="t">{type}</span></li>
+        ))}
+      </ul>
+    </section>
 
-  <h3>Fuentes más citadas</h3>
-  <ul>
-    {topSources.map(([name, count]) => <li>{name}: {count}</li>)}
-  </ul>
+    <section>
+      <h2 class="section-title">Fuentes más citadas</h2>
+      <ul class="stat-list">
+        {topSources.map(([name, count]) => (
+          <li><span class="n">{count}</span><span class="t">{name}</span></li>
+        ))}
+      </ul>
+    </section>
 
-  <p>Total: {pieces.length} piezas</p>
+    <p class="total">Total: {pieces.length} piezas</p>
+  </div>
+
+  <style>
+    h1 { font-family: var(--font-display); font-size: 40px; margin: var(--space-2) 0 4px; }
+    .sub { color: var(--ink-soft); margin-bottom: var(--space-4); }
+    section { margin-bottom: var(--space-4); }
+    .section-title {
+      font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--ink-faint); margin: 0 0 var(--space-2); font-weight: normal;
+    }
+    .timeline { display: flex; gap: 4px; align-items: flex-end; height: 90px; margin-bottom: var(--space-2); }
+    .timeline .bar { flex: 1; background: var(--rojo); position: relative; border-radius: 1px 1px 0 0; }
+    .timeline .bar .lbl {
+      position: absolute; bottom: -22px; left: 0; right: 0; text-align: center;
+      font-family: var(--font-mono); font-size: 10px; color: var(--ink-faint);
+    }
+    .stat-list { list-style: none; padding: 0; margin: 0; font-family: var(--font-mono); font-size: 14px; }
+    .stat-list li { display: flex; gap: var(--space-2); padding: 4px 0; border-bottom: 1px dashed var(--rule); }
+    .stat-list .n { color: var(--rojo); font-weight: 600; min-width: 2ch; }
+    .stat-list .t { color: var(--ink-soft); }
+    .total { font-family: var(--font-mono); font-size: 14px; color: var(--ink-faint); }
+  </style>
 </Base>

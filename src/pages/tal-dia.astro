@@ -17,30 +17,36 @@ const todays = exact.filter((p) => p.data.date.slice(5) === todayMD);
 const fallback = todays.length === 0 ? closestPieceToToday(pieces, today) : null;
 ---
 <Base title="Tal día como hoy">
-  <h2>Tal día como hoy en la historia del Dragón</h2>
-  {!unlocked ? (
-    <p class="notice">
-      Esta vista se activa con {RICH_VIEWS_THRESHOLD} piezas curadas (hoy: {pieces.length}).
-    </p>
-  ) : todays.length > 0 ? (
-    <ul>
-      {todays.map((p) => (
-        <li>
-          <a href={`/pieza/${p.collection}/${p.id}`}>{p.data.title}</a>
-          <SourceCite source={p.data.source} />
-        </li>
-      ))}
-    </ul>
-  ) : fallback ? (
-    <div>
-      <p>No hay piezas exactas para hoy. La más cercana:</p>
-      <a href={`/pieza/${fallback.collection}/${fallback.id}`}>{fallback.data.title}</a>
-      <SourceCite source={fallback.data.source} />
-    </div>
-  ) : (
-    <p>Todavía no hay piezas con fecha exacta.</p>
-  )}
+  <div class="wrap">
+    <span class="kicker">Autogenerado</span>
+    <h1>Tal día como hoy en la historia del Dragón</h1>
+    {!unlocked ? (
+      <p class="notice">
+        Esta vista se activa con {RICH_VIEWS_THRESHOLD} piezas curadas (hoy: {pieces.length}).
+      </p>
+    ) : todays.length > 0 ? (
+      <ul class="list">
+        {todays.map((p) => (
+          <li>
+            <a href={`/pieza/${p.collection}/${p.id}`}>{p.data.title}</a>
+            <SourceCite source={p.data.source} />
+          </li>
+        ))}
+      </ul>
+    ) : fallback ? (
+      <div class="fallback">
+        <p>No hay piezas exactas para hoy. La más cercana:</p>
+        <a href={`/pieza/${fallback.collection}/${fallback.id}`}>{fallback.data.title}</a>
+        <SourceCite source={fallback.data.source} />
+      </div>
+    ) : (
+      <p>Todavía no hay piezas con fecha exacta.</p>
+    )}
+  </div>
   <style>
-    .notice { background: #fff8e6; border: 1px solid #e6c200; padding: 0.8rem; }
+    h1 { font-family: var(--font-display); font-size: clamp(28px, 5vw, 40px); margin: var(--space-2) 0 var(--space-3); }
+    .list { list-style: none; padding: 0; }
+    .list li { border-bottom: 1px solid var(--rule); padding: var(--space-2) 0; }
+    .list a { font-family: var(--font-display); font-size: 19px; font-weight: 600; }
   </style>
 </Base>
