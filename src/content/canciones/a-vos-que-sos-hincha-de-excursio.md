@@ -11,10 +11,11 @@ source:
 tags: ["cancionero", "clasico-del-bajo"]
 ---
 
-Vos que sos hincha de excursio
-Y que te mandamo' a la C
-Te vamo' a mostrar lo que siente
+Vos que sos hincha de excursio  
+Y que te mandamo' a la C  
+Te vamo' a mostrar lo que siente  
 La gente que lo sigue a De
-Nosotros queremos la vuelta
-Nosotros queremos ascender
+
+Nosotros queremos la vuelta  
+Nosotros queremos ascender  
 Nosotros tenemos los huevos que vos no tenes

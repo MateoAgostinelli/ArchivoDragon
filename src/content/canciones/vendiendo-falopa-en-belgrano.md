@@ -11,11 +11,12 @@ source:
 tags: ["cancionero"]
 ---
 
-Vendiendo falopa, en Belgrano los vas a ver
-Transa hijo de puta, vos de Excursio tenes que ser
-Vos haces banderas, a tu vieja la haces coser
+Vendiendo falopa, en Belgrano los vas a ver  
+Transa hijo de puta, vos de Excursio tenes que ser  
+Vos haces banderas, a tu vieja la haces coser  
 Y todos sabemos, que paras con la 33
-Vos vos sos un cagon
-Chupan pija alla en Victoria
-No te olvides, quien te mando a la C
+
+Vos vos sos un cagon  
+Chupan pija alla en Victoria  
+No te olvides, quien te mando a la C  
 Quien te mando al descenso

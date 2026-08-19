@@ -24,6 +24,10 @@ const archivedLink =
     margin-top: var(--space-2);
   }
   .fuente .label { color: var(--ink-soft); }
-  .fuente a { color: var(--rojo); text-decoration: underline; }
+  /* position+z-index: cuando esta cita vive dentro de una tarjeta con
+     "stretched link" (ver song-card en [type]/index.astro), estos links
+     necesitan quedar por encima del ::after que cubre toda la tarjeta,
+     para poder clickearse de forma independiente. */
+  .fuente a { color: var(--rojo); text-decoration: underline; position: relative; z-index: 1; }
   .pending { font-style: italic; }
 </style>

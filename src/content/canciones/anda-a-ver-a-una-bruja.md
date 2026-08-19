@@ -11,15 +11,17 @@ source:
 tags: ["cancionero"]
 ---
 
-Que alegria que alegria,
-Ole, ole, ola!
-Vamo Defe todavia!
+Que alegria que alegria,  
+Ole, ole, ola!  
+Vamo Defe todavia!  
 Que esta para ganar,
-En cancha de platense,
-te mandamo a la C,
-como no tienen huevos,
+
+En cancha de platense,  
+te mandamo a la C,  
+como no tienen huevos,  
 jamas van a volver,
-anda a ver a una bruja,
-anda a ver a un doctor,
-que te saque del orto,
+
+anda a ver a una bruja,  
+anda a ver a un doctor,  
+que te saque del orto,  
 la pija del dragon.
