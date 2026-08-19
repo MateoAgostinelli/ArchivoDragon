@@ -11,7 +11,10 @@ source:
 tags: ["cancionero", "clasico-del-bajo"]
 ---
 
-Cántico de la Barra del Dragón dirigido a Excursionistas, rival histórico del
-Clásico del Bajo. Fecha de origen desconocida — folclore de tribuna sin autor
-identificado; se registra la fecha de archivado, no de composición. Letra
-completa disponible en la fuente original.
+Vos que sos hincha de excursio
+Y que te mandamo' a la C
+Te vamo' a mostrar lo que siente
+La gente que lo sigue a De
+Nosotros queremos la vuelta
+Nosotros queremos ascender
+Nosotros tenemos los huevos que vos no tenes

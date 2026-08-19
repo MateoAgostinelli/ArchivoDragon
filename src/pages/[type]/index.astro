@@ -11,32 +11,60 @@ export function getStaticPaths() {
 
 const { type } = Astro.params as { type: (typeof PIECE_TYPES)[number] };
 const pieces = sortByDate(await getCollection(type as CollectionKey)).reverse();
+const isCancionero = type === "canciones";
 ---
 <Base title={type}>
   <div class="wrap">
     <span class="kicker">{type}</span>
     <h1>{type}</h1>
     <p class="count">{pieces.length} piezas</p>
-    <ul class="list">
-      {pieces.map((p) => (
-        <li>
-          <div class="row">
-            <a href={url(`pieza/${type}/${p.id}`)}>{p.data.title}</a>
-            <span class="fecha">{p.data.date_display ?? p.data.date}</span>
-          </div>
-          <SourceCite source={p.data.source} />
-        </li>
-      ))}
-    </ul>
+
+    {isCancionero ? (
+      <div class="song-grid">
+        {pieces.map((p) => (
+          <article class="song-card">
+            <span class="note">♪</span>
+            <h3><a href={url(`pieza/${type}/${p.id}`)}>{p.data.title}</a></h3>
+            <SourceCite source={p.data.source} />
+          </article>
+        ))}
+      </div>
+    ) : (
+      <ul class="list">
+        {pieces.map((p) => (
+          <li>
+            <div class="row">
+              <a href={url(`pieza/${type}/${p.id}`)}>{p.data.title}</a>
+              <span class="fecha">{p.data.date_display ?? p.data.date}</span>
+            </div>
+            <SourceCite source={p.data.source} />
+          </li>
+        ))}
+      </ul>
+    )}
   </div>
   <style>
     h1 { font-family: var(--font-display); font-size: 40px; margin: var(--space-2) 0 4px; text-transform: capitalize; }
     .count { font-family: var(--font-mono); font-size: 13px; color: var(--ink-faint); margin-bottom: var(--space-4); }
+
+    /* Listado genérico (noticias, partidos, historias, fotos) */
     .list { list-style: none; padding: 0; margin: 0; }
     .list li { border-bottom: 1px solid var(--rule); padding: var(--space-2) 0; }
     .row { display: flex; align-items: baseline; gap: var(--space-2); flex-wrap: wrap; }
     .row a { font-family: var(--font-display); font-size: 19px; font-weight: 600; color: var(--ink); text-decoration: none; }
     .row a:hover { color: var(--rojo); }
     .fecha { font-family: var(--font-mono); font-size: 13px; color: var(--ink-faint); }
+
+    /* Grilla de tarjetas del cancionero */
+    .song-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-2); }
+    .song-card {
+      background: var(--paper-raised); border: 1px solid var(--rule); border-radius: var(--radius-md);
+      padding: var(--space-3) var(--space-2) var(--space-2);
+      display: flex; flex-direction: column; gap: var(--space-1);
+    }
+    .song-card .note { font-size: 22px; color: var(--rojo); line-height: 1; }
+    .song-card h3 { font-family: var(--font-display); font-size: 20px; font-weight: 600; margin: 0; line-height: 1.15; }
+    .song-card h3 a { color: var(--ink); text-decoration: none; }
+    .song-card h3 a:hover { color: var(--rojo); }
   </style>
 </Base>
