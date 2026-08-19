@@ -31,28 +31,32 @@
   --wrap-max: 1040px;
 }
 
-:root[data-theme="dark"] {
-  --paper: #161311;
-  --paper-raised: #201c19;
+/* Selector de color explícito (blanco/negro/rojo) — el visitante elige,
+   no se infiere del sistema operativo. Default (:root, sin atributo) =
+   blanco/papel. Ver el picker en Base.astro. */
+:root[data-theme="negro"] {
+  --paper: #0d0d0d;
+  --paper-raised: #1a1a1a;
   --ink: #f0ebe2;
   --ink-soft: #c2b4a0;
   --ink-faint: #8c7c68;
-  --rule: #362f28;
+  --rule: #333333;
   --rojo: #ff4d3d;
   --rojo-hover: #ff6e5f;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --paper: #161311;
-    --paper-raised: #201c19;
-    --ink: #f0ebe2;
-    --ink-soft: #c2b4a0;
-    --ink-faint: #8c7c68;
-    --rule: #362f28;
-    --rojo: #ff4d3d;
-    --rojo-hover: #ff6e5f;
-  }
+:root[data-theme="rojo"] {
+  --paper: #8f1912;
+  --paper-raised: #a3241f;
+  --ink: #1a1a1a;
+  --ink-soft: #fdf3ee;
+  --ink-faint: #f0c9c0;
+  --rule: #c94840;
+  /* El acento "rojo" pasa a negro: no puede haber texto rojo sobre fondo
+     rojo. Todo lo que usa var(--rojo) como acento (kickers, links, hover,
+     barras de timeline) se vuelve negro automáticamente en este tema. */
+  --rojo: #1a1a1a;
+  --rojo-hover: #000000;
 }
 
 * { box-sizing: border-box; }
