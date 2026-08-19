@@ -14,7 +14,7 @@ src/
   content/             # las piezas en sí (Markdown + frontmatter)
   lib/views.ts         # lógica pura de vistas derivadas (gating, fallback tal-día) — testeada con vitest
   lib/archive.ts        # helpers que sí tocan astro:content
-  pages/                # inicio, listados, detalle, /stats, tal-día, máquina del tiempo
+  pages/                # inicio, listados, detalle, tal-día, máquina del tiempo
 pipeline/
   dates.py              # parser de fechas en prosa castellana
   normalize.py          # HTML scrapeado -> Markdown sanitizado (defensa XSS)
