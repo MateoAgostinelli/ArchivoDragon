@@ -15,7 +15,7 @@ const sources = new Set(pieces.map((p) => p.data.source.name));
       <div class="hero-top">
         <div class="hero-text">
           <span class="tag">Archivo histórico — 1906 / hoy</span>
-          <h1>ARCHIVO<br /><em>Dragón</em></h1>
+          <h1>ARCHIVO<br /><span class="rojo">DRAGÓN</span></h1>
         </div>
         <img src={url("escudo.svg")} alt="Escudo de Defensores de Belgrano" class="hero-escudo" />
       </div>
@@ -69,7 +69,7 @@ const sources = new Set(pieces.map((p) => p.data.source.name));
       font-family: var(--font-display); font-weight: 900; font-size: clamp(52px, 11vw, 168px);
       line-height: 0.88; letter-spacing: -0.02em; margin: 0; color: var(--ink);
     }
-    .hero h1 em { font-style: italic; font-weight: 500; color: var(--rojo); }
+    .hero h1 .rojo { color: var(--rojo); }
     @media (max-width: 640px) {
       .hero-top { flex-direction: column-reverse; align-items: center; text-align: center; }
       .hero-escudo { width: 90px; }
