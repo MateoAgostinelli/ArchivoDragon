@@ -1,12 +1,12 @@
 /* Tokens del sistema de diseño — ver DESIGN.md (fuente de verdad).
    No hardcodear colores/fuentes en componentes: usar estas variables. */
 :root {
-  --paper: #f4ede2;
-  --paper-raised: #ede4d6;
+  --paper: #ffffff;
+  --paper-raised: #f2f0ec;
   --ink: #121212;
   --ink-soft: #4a4642;
   --ink-faint: #8c7c68;
-  --rule: #d8cbb5;
+  --rule: #ddd8ce;
   --rojo: #e3241c;
   --rojo-hover: #b81810;
   --success: #2f5d3a;
