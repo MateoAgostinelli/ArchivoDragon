@@ -1,27 +1,177 @@
 ---
-// Gateada hasta RICH_VIEWS_THRESHOLD piezas (decisión T1). Feature bandera de
-// etapa 2 según el design doc: navegar por fecha y "revivir un día". Necesita
-// el schema v2 de partido (rival/resultado/torneo/formación) ya diseñado en
-// content.config.ts. TODO: selector de fecha real; hoy es un placeholder.
+// Línea de tiempo interactiva: barra cronológica con los años que tienen
+// piezas, clickeable para saltar al bloque de ese año. Pedida explícitamente
+// por el usuario para lanzarse ya, saltando el gate de RICH_VIEWS_THRESHOLD
+// que aplica al resto de las "vistas ricas" (decisión T1, ver views.ts) —
+// override deliberado, no un bug: tal-dia.astro sigue gateada.
 import Base from "../layouts/Base.astro";
-import { getAllPieces, richViewsUnlocked, RICH_VIEWS_THRESHOLD } from "../lib/archive";
+import SourceCite from "../components/SourceCite.astro";
+import { getAllPieces, sortByDate } from "../lib/archive";
+import { url } from "../lib/base";
 
-const pieces = await getAllPieces();
-const unlocked = await richViewsUnlocked();
+// Las canciones quedan afuera: no tienen fecha de evento histórico real (hoy
+// llevan una fecha placeholder), así que no pertenecen a una línea de tiempo.
+const pieces = sortByDate(await getAllPieces()).filter((p) => p.collection !== "canciones");
+
+const byYear = new Map<number, typeof pieces>();
+for (const p of pieces) {
+  const year = Number(p.data.date.slice(0, 4));
+  if (!byYear.has(year)) byYear.set(year, []);
+  byYear.get(year)!.push(p);
+}
+const years = [...byYear.keys()].sort((a, b) => a - b);
+const minYear = years[0];
+const maxYear = years[years.length - 1];
+const span = Math.max(maxYear - minYear, 1);
+
+const typeLabel: Record<string, string> = {
+  noticias: "Noticia",
+  partidos: "Partido",
+  historias: "Historia",
+  canciones: "Canción",
+  fotos: "Foto",
+};
+
+// Ancho mínimo de la pista para que los años no se amontonen en pantallas
+// angostas — en mobile la barra scrollea horizontalmente en vez de achicar
+// las etiquetas hasta hacerlas ilegibles. Basado en el RANGO de años (span),
+// no en la cantidad de piezas: lo que aprieta las etiquetas es cuántos
+// años caben por pixel, no cuántos años tienen contenido.
+const trackWidth = Math.max(700, span * 12);
+// Posición en px (no %): un elemento position:absolute dentro de un
+// position:relative se ubica relativo al borde del padre, no a su padding
+// — así que reservamos EDGE_PAD a mano en vez de confiar en el padding del
+// contenedor, o el primer/último año quedan con la etiqueta cortada.
+const EDGE_PAD = 24;
+const tickLeft = (year: number) => EDGE_PAD + ((year - minYear) / span) * (trackWidth - EDGE_PAD * 2);
 ---
 <Base title="Máquina del tiempo">
   <div class="wrap">
-    <span class="kicker">En construcción</span>
+    <span class="kicker">Navegar por año</span>
     <h1>Máquina del tiempo</h1>
-    {!unlocked ? (
-      <p class="notice">
-        Esta vista se activa con {RICH_VIEWS_THRESHOLD} piezas curadas (hoy: {pieces.length}).
-      </p>
-    ) : (
-      <p>TODO: selector de fecha navegable.</p>
+    <p class="sub">{pieces.length} piezas repartidas en {years.length} años, de {minYear} a {maxYear}. Clickeá un año para ir directo.</p>
+
+    {years.length > 0 && (
+      <div class="timeline-scroll">
+        <nav class="timeline" style={`min-width: ${trackWidth}px`} aria-label="Línea de tiempo por año">
+          <div class="axis"></div>
+          {years.map((year, i) => (
+            <a
+              class={`tick tick-row-${i % 3}`}
+              href={`#y${year}`}
+              style={`left: ${tickLeft(year)}px`}
+            >
+              <span class="mark"></span>
+              <span class="label">{year}</span>
+            </a>
+          ))}
+        </nav>
+      </div>
     )}
+
+    <div class="years">
+      {years.map((year) => (
+        <section id={`y${year}`} class="year-block">
+          <h2>{year}</h2>
+          <ul class="list">
+            {byYear.get(year)!.map((p) => (
+              <li>
+                <div class="row">
+                  <span class="kicker small">{typeLabel[p.collection] ?? p.collection}</span>
+                  <a href={url(`pieza/${p.collection}/${p.id}`)}>{p.data.title}</a>
+                  <span class="fecha">{p.data.date_display ?? p.data.date}</span>
+                </div>
+                <SourceCite source={p.data.source} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
+
+    {years.length === 0 && <p class="notice">Todavía no hay piezas cargadas.</p>}
   </div>
   <style>
-    h1 { font-family: var(--font-display); font-size: clamp(28px, 5vw, 40px); margin: var(--space-2) 0 var(--space-3); }
+    h1 { font-family: var(--font-display); font-size: clamp(28px, 5vw, 40px); margin: var(--space-2) 0 4px; }
+    .sub { color: var(--ink-soft); font-size: 15px; margin: 0 0 var(--space-4); }
+
+    .timeline-scroll {
+      overflow-x: auto;
+      margin: 0 0 var(--space-5);
+      -webkit-overflow-scrolling: touch;
+    }
+    .timeline {
+      position: relative;
+      height: 100px;
+    }
+    .axis {
+      position: absolute;
+      top: 8px;
+      left: 24px;
+      right: 24px;
+      height: 2px;
+      background: var(--rule);
+    }
+    .tick {
+      position: absolute;
+      top: 0;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      color: var(--ink-faint);
+      transition: color 100ms ease-out;
+    }
+    .tick .mark {
+      width: 2px;
+      height: 9px;
+      background: var(--ink-faint);
+      transition: background-color 100ms ease-out, height 100ms ease-out;
+    }
+    .tick .label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+    .tick:hover, .tick:focus-visible {
+      color: var(--rojo);
+    }
+    .tick:hover .mark, .tick:focus-visible .mark {
+      background: var(--rojo);
+      height: 14px;
+    }
+    /* Cuando los años están apretados (ej. 1906-1937), repartir la etiqueta
+       en 3 filas escalonadas evita que el texto se superponga. */
+    .tick-row-1 .label { margin-top: 12px; }
+    .tick-row-1 .mark { height: 22px; }
+    .tick-row-1:hover .mark, .tick-row-1:focus-visible .mark { height: 26px; }
+    .tick-row-2 .label { margin-top: 24px; }
+    .tick-row-2 .mark { height: 35px; }
+    .tick-row-2:hover .mark, .tick-row-2:focus-visible .mark { height: 39px; }
+
+    .years { border-top: 1px solid var(--rule); }
+    .year-block {
+      padding: var(--space-4) 0;
+      border-bottom: 1px solid var(--rule);
+      scroll-margin-top: var(--space-3);
+    }
+    .year-block h2 {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--rojo);
+      margin: 0 0 var(--space-2);
+    }
+    .list { list-style: none; padding: 0; margin: 0; }
+    .list li { border-bottom: 1px solid var(--rule); padding: var(--space-2) 0; }
+    .list li:last-child { border-bottom: none; }
+    .row { display: flex; align-items: baseline; gap: var(--space-2); flex-wrap: wrap; }
+    .kicker.small { font-size: 9px; padding: 0 5px; }
+    .row a { font-family: var(--font-display); font-size: 18px; font-weight: 600; color: var(--ink); text-decoration: none; }
+    .row a:hover { color: var(--rojo); }
+    .fecha { font-family: var(--font-mono); font-size: 12px; color: var(--ink-faint); }
   </style>
 </Base>
