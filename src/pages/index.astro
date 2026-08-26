@@ -58,9 +58,9 @@ const sources = new Set(pieces.map((p) => p.data.source.name));
 
   <style>
     .hero { padding: var(--space-5) 0 var(--space-4); border-bottom: 1px solid var(--rule); }
-    .hero-top { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-4); }
+    .hero-top { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-4); }
     .hero-text { min-width: 0; }
-    .hero-escudo { width: clamp(90px, 12vw, 160px); height: auto; flex-shrink: 0; margin-top: 8px; }
+    .hero-escudo { width: clamp(90px, 12vw, 160px); height: auto; flex-shrink: 0; }
     .hero .tag {
       font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
       color: var(--rojo); margin-bottom: var(--space-2); display: block;
