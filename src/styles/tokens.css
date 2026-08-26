@@ -48,15 +48,20 @@
 :root[data-theme="rojo"] {
   --paper: #8f1912;
   --paper-raised: #a3241f;
-  --ink: #1a1a1a;
+  --ink: #000000;
   --ink-soft: #fdf3ee;
   --ink-faint: #f0c9c0;
   --rule: #c94840;
   /* El acento "rojo" pasa a negro: no puede haber texto rojo sobre fondo
      rojo. Todo lo que usa var(--rojo) como acento (kickers, links, hover,
-     barras de timeline) se vuelve negro automáticamente en este tema. */
-  --rojo: #1a1a1a;
-  --rojo-hover: #000000;
+     barras de timeline) se vuelve negro automáticamente en este tema.
+     Nota de contraste: sobre el fondo rojo (#8f1912), negro puro solo da
+     ~2.3:1 (no llega al 4.5:1 de WCAG AA) — el fondo ya es demasiado
+     oscuro para que cualquier negro contraste bien. Se eligió igual a
+     pedido explícito del usuario 2026-08-26; --ink-soft/--ink-faint (claros)
+     siguen siendo la opción legible real en este tema. */
+  --rojo: #000000;
+  --rojo-hover: #1a1a1a;
 }
 
 * { box-sizing: border-box; }
