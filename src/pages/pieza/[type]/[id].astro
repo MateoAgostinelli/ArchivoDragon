@@ -27,7 +27,9 @@ const partido = entry.data as typeof entry.data & {
   <div class="wrap">
     <span class="kicker">{entry.collection}</span>
     <h1>{entry.data.title}</h1>
-    <div class="fecha">{entry.data.date_display ?? entry.data.date}</div>
+    {entry.collection !== "canciones" && (
+      <div class="fecha">{entry.data.date_display ?? entry.data.date}</div>
+    )}
 
     {entry.collection === "partidos" && (partido.rival || partido.resultado) && (
       <div class="ficha">
